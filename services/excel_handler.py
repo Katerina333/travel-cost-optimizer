@@ -51,8 +51,9 @@ class ExcelHandler:
                 ],
                 'ServiceTypes': ['Emergency,Repair', 'Installation,Maintenance', 'All', 'Repair,Emergency', 'Emergency,Installation'],
                 'TravelMode': ['Car', 'Car', 'Van', 'Car', 'Van'],
-                'HourlyRate': [30.00, 25.00, 35.00, 28.00, 32.00],
-                'MileageRate': [0.45, 0.45, 0.60, 0.45, 0.60]
+                'ServiceCost': [50.00, 45.00, 60.00, 48.00, 55.00],  # Flat service cost
+                'TravelTimeRate': [15.00, 15.00, 18.00, 15.00, 18.00],  # Per hour for travel
+                'MileageRate': [0.45, 0.45, 0.60, 0.45, 0.60]  # Per mile
             })
             providers_df.to_excel(writer, sheet_name='Providers', index=False)
             
@@ -60,7 +61,7 @@ class ExcelHandler:
             worksheet = writer.sheets['Providers']
             header_format = workbook.add_format({'bold': True, 'bg_color': '#4472C4', 'font_color': 'white'})
             worksheet.set_row(0, 20, header_format)
-            worksheet.set_column('A:G', 20)
+            worksheet.set_column('A:H', 20)
         
         return bookings_output.getvalue(), providers_output.getvalue()
     
@@ -276,8 +277,12 @@ class ExcelHandler:
             provider.name = str(row.get('ProviderName', provider.id))
             provider.service_types = str(row.get('ServiceTypes', 'All'))
             provider.travel_mode = str(row.get('TravelMode', 'Car'))
-            provider.hourly_rate = float(row.get('HourlyRate', 25.00))
+            provider.service_cost = float(row.get('ServiceCost', 50.00))  # Flat service cost
+            provider.travel_time_rate = float(row.get('TravelTimeRate', 15.00))  # Travel time rate
             provider.mileage_rate = float(row.get('MileageRate', 0.45))
+            
+            # For backward compatibility
+            provider.hourly_rate = float(row.get('HourlyRate', provider.service_cost))
             
             all_providers.append(provider)
         
@@ -297,8 +302,17 @@ class ExcelHandler:
             matched_providers = []
             for provider in all_providers:
                 # Check if provider offers this service type
-                if provider.service_types == 'All' or service_type in provider.service_types:
+                provider_services = provider.service_types.split(',')
+                provider_services = [s.strip() for s in provider_services]
+                
+                # Match if provider has 'All' or the specific service type
+                if 'All' in provider_services or service_type in provider_services:
                     matched_providers.append(provider)
+            
+            # If no providers matched, add all providers as fallback
+            if not matched_providers:
+                print(f"Warning: No providers matched for {service_type}, using all providers")
+                matched_providers = all_providers
             
             booking = Booking(
                 booking_id=booking_id,
@@ -316,7 +330,7 @@ class ExcelHandler:
         return bookings
     
     @staticmethod
-    def create_results_excel(results: List[Dict], report_type: str = 'planning') -> bytes:
+    def create_results_excel(results, report_type: str = 'planning') -> bytes:
         """Create Excel report with results"""
         output = io.BytesIO()
         
