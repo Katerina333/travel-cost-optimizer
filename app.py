@@ -71,12 +71,8 @@ with st.sidebar:
     - 🔄 Webhook support
     - 📈 Usage analytics
     
-    ### Pricing
-    - **Starter**: £99/month
-    - **Professional**: £299/month
-    - **Enterprise**: Custom
-    
-    [Get API Key →](https://travelcost.uk/api)
+    ### Contact
+    📧 katerina.i@eco-n-tech.com
     """)
 
 # Footer

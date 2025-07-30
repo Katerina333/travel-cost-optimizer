@@ -86,7 +86,8 @@ def render_provider_settings() -> Dict:
                     value=0.45, 
                     min_value=0.0,
                     max_value=1.0,
-                    step=0.01
+                    step=0.01,
+                    key="mileage_rate"
                 )
             else:
                 mileage_rate = 0.45
@@ -96,7 +97,8 @@ def render_provider_settings() -> Dict:
                 value=15.00,
                 min_value=0.0,
                 max_value=100.0,
-                step=1.00
+                step=1.00,
+                key="travel_time_rate"
             )
             
             if travel_mode in ["Public Transport", "Mixed"]:
@@ -107,7 +109,7 @@ def render_provider_settings() -> Dict:
         with col3:
             st.write("**Calculation Options**")
             include_return = st.checkbox("Include return journey", value=True)
-            include_parking = st.checkbox("Include parking costs", value=True)
+            include_parking = st.checkbox("Include parking costs", value=True, key="include_parking")
             include_congestion = st.checkbox("Include congestion charges", value=True)
     
     return {
@@ -247,13 +249,16 @@ def render_excel_upload(provider_id: str, provider_start: str, travel_mode: str,
                        maps_service, uk_transport, include_return: bool):
     """Render Excel file upload interface"""
     
+    # Add clear instructions
+    st.info("📋 **Important**: Use the Provider Journey Template (not the Planning template). The template should contain a 'Provider_Journey' worksheet with booking locations and times.")
+    
     col1, col2 = st.columns([3, 1])
     
     with col1:
         uploaded_file = st.file_uploader(
             "Upload completed provider journey Excel template",
             type=['xlsx'],
-            help="Download and fill the Excel template, then upload here",
+            help="Download and fill the Provider Journey Excel template, then upload here",
             key="provider_excel_upload"
         )
     
@@ -263,15 +268,19 @@ def render_excel_upload(provider_id: str, provider_start: str, travel_mode: str,
         template = excel_handler.create_provider_journey_template()
         
         st.download_button(
-            label="📥 Download Template",
+            label="📥 Download Provider Journey Template",
             data=template,
             file_name="provider_journey_template.xlsx",
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            help="Download Excel template for provider journey"
+            help="Download Excel template specifically for provider journey calculations"
         )
     
     if uploaded_file:
         try:
+            # Check file size and name for debugging
+            file_details = {"Filename": uploaded_file.name, "FileSize": f"{uploaded_file.size} bytes"}
+            st.caption(f"Uploaded: {uploaded_file.name}")
+            
             # Parse Excel file
             excel_handler = ExcelHandler()
             data = excel_handler.parse_provider_journey_excel(uploaded_file.read())
@@ -350,11 +359,17 @@ def render_excel_upload(provider_id: str, provider_start: str, travel_mode: str,
                         maps_service
                     )
             else:
-                st.warning("No bookings found in the Excel file")
+                st.warning("No bookings found in the Excel file. Please ensure you're using the Provider Journey template.")
             
+        except ValueError as ve:
+            if "Worksheet named 'Provider_Journey' not found" in str(ve):
+                st.error("❌ Wrong template! This file doesn't contain a 'Provider_Journey' worksheet.")
+                st.warning("Please download and use the 'Provider Journey Template' button above, not the planning templates.")
+            else:
+                st.error(f"Error processing Excel file: {str(ve)}")
         except Exception as e:
             st.error(f"Error processing Excel file: {str(e)}")
-            st.write("Please ensure your Excel file matches the template format")
+            st.write("Please ensure your Excel file matches the Provider Journey template format")
 
 def display_booking_summary(bookings: List[Dict]):
     """Display summary of loaded bookings"""
@@ -557,141 +572,6 @@ def calculate_provider_journey_with_rates(start_location: str, bookings: List[Di
         'mileage_rate': mileage_rate,
         'parking_paid': parking_paid
     }
-    
-    return results
-    """Calculate costs for provider's journey"""
-    
-    results = {
-        'legs': [],
-        'total_distance': 0,
-        'total_duration': 0,
-        'total_cost': 0,
-        'breakdown': {}
-    }
-    
-    # Sort bookings by time
-    sorted_bookings = sorted(bookings, key=lambda x: x.get('start_time', '00:00'))
-    
-    # Calculate each leg
-    current_location = start_location
-    
-    for i, booking in enumerate(sorted_bookings):
-        # Calculate travel from current location to booking
-        route_info = maps_service.get_route_with_directions(
-            current_location,
-            booking['address']
-        )
-        
-        if route_info['success']:
-            distance = route_info['distance_miles']
-            duration = route_info['duration_minutes']
-            
-            # Calculate costs based on travel mode
-            if travel_mode == "Car":
-                driving_costs = uk_transport.get_total_driving_cost(
-                    distance,
-                    current_location,
-                    booking['address'],
-                    duration / 60
-                )
-                leg_cost = driving_costs['total']
-                cost_breakdown = driving_costs['breakdown']
-            else:
-                # Public transport
-                public_costs = uk_transport.estimate_public_transport_cost(
-                    current_location,
-                    booking['address'],
-                    distance
-                )
-                
-                if 'ticket_cost' in booking and booking['ticket_cost'] > 0:
-                    leg_cost = booking['ticket_cost']
-                elif 'train' in public_costs:
-                    leg_cost = public_costs['train']['cost']
-                else:
-                    leg_cost = distance * 0.20
-                
-                cost_breakdown = {'public_transport': leg_cost}
-            
-            # Add travel time cost
-            travel_time_cost = (duration / 60) * 15.00
-            cost_breakdown['travel_time'] = round(travel_time_cost, 2)
-            leg_cost += travel_time_cost
-            
-            results['legs'].append({
-                'from': current_location,
-                'to': booking['address'],
-                'booking_id': booking.get('booking_id', f'B{i+1}'),
-                'distance': round(distance, 1),
-                'duration': round(duration, 0),
-                'cost': round(leg_cost, 2),
-                'breakdown': cost_breakdown,
-                'polyline': route_info.get('polyline')
-            })
-            
-            results['total_distance'] += distance
-            results['total_duration'] += duration
-            results['total_cost'] += leg_cost
-            
-            current_location = booking['address']
-    
-    # Add return journey if requested
-    if include_return and sorted_bookings:
-        return_route = maps_service.get_route_with_directions(
-            current_location,
-            start_location
-        )
-        
-        if return_route['success']:
-            distance = return_route['distance_miles']
-            duration = return_route['duration_minutes']
-            
-            if travel_mode == "Car":
-                driving_costs = uk_transport.get_total_driving_cost(
-                    distance,
-                    current_location,
-                    start_location,
-                    duration / 60
-                )
-                leg_cost = driving_costs['total']
-                cost_breakdown = driving_costs['breakdown']
-            else:
-                leg_cost = distance * 0.20
-                cost_breakdown = {'public_transport': leg_cost}
-            
-            travel_time_cost = (duration / 60) * 15.00
-            cost_breakdown['travel_time'] = round(travel_time_cost, 2)
-            leg_cost += travel_time_cost
-            
-            results['legs'].append({
-                'from': current_location,
-                'to': start_location,
-                'booking_id': 'RETURN',
-                'distance': round(distance, 1),
-                'duration': round(duration, 0),
-                'cost': round(leg_cost, 2),
-                'breakdown': cost_breakdown,
-                'polyline': return_route.get('polyline')
-            })
-            
-            results['total_distance'] += distance
-            results['total_duration'] += duration
-            results['total_cost'] += leg_cost
-    
-    # Round totals
-    results['total_distance'] = round(results['total_distance'], 1)
-    results['total_duration'] = round(results['total_duration'], 0)
-    results['total_cost'] = round(results['total_cost'], 2)
-    
-    # Create breakdown summary
-    breakdown_summary = {}
-    for leg in results['legs']:
-        for key, value in leg['breakdown'].items():
-            if key not in breakdown_summary:
-                breakdown_summary[key] = 0
-            breakdown_summary[key] += value
-    
-    results['breakdown'] = {k: round(v, 2) for k, v in breakdown_summary.items()}
     
     return results
 
