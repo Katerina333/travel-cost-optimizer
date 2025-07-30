@@ -140,19 +140,13 @@ def render_intro_screen():
     st.markdown("""
     <div class="main-header">
         <h1 style="font-size: 3.5rem; margin-bottom: 1rem;">🚗 Smart Travel Cost Optimizer</h1>
-        <p style="font-size: 1.4rem; opacity: 0.95; margin-bottom: 2rem;">AI-Powered Route Planning for Service Businesses</p>
-        <p style="font-size: 1.1rem; opacity: 0.9; margin-bottom: 2rem;">Automatically assign the right provider to each job while minimizing travel costs</p>
+        <p style="font-size: 1.4rem; opacity: 0.95; margin-bottom: 2rem;">AI-Powered Route Planning for Service Provider Businesses</p>
+        <p style="font-size: 1.1rem; opacity: 0.9; margin-bottom: 2rem;">Match the right freelancer to each job while minimizing travel costs</p>
     </div>
     """, unsafe_allow_html=True)
     
     # The Problem - Visual
-    st.markdown("## 🔴 The Problem: Service Businesses Waste Money on Travel")
-    st.markdown("""
-    <p style="text-align: center; font-size: 1.2rem; color: #666; margin-bottom: 2rem;">
-    When you have 50 service providers and 100 jobs across the city, who goes where? 
-    Current planning methods are broken.
-    </p>
-    """, unsafe_allow_html=True)
+    st.markdown("## 🔴 The Problem")
     
     col1, col2, col3 = st.columns(3)
     
@@ -162,7 +156,7 @@ def render_intro_screen():
             <h1 style="font-size: 4rem; margin: 0;">📍</h1>
             <p class="big-number">4hrs</p>
             <p style="margin: 0; font-weight: bold;">Daily planning time</p>
-            <p style="margin: 0; color: #666; font-size: 0.9rem;">Manually matching providers to jobs</p>
+            <p style="margin: 0; color: #666; font-size: 0.9rem;">Manually matching freelancers to clients</p>
         </div>
         """, unsafe_allow_html=True)
     
@@ -172,7 +166,7 @@ def render_intro_screen():
             <h1 style="font-size: 4rem; margin: 0;">🚗</h1>
             <p class="big-number">£45K</p>
             <p style="margin: 0; font-weight: bold;">Annual overspend</p>
-            <p style="margin: 0; color: #666; font-size: 0.9rem;">Sending wrong provider = longer trips</p>
+            <p style="margin: 0; color: #666; font-size: 0.9rem;">Wrong provider = longer trips</p>
         </div>
         """, unsafe_allow_html=True)
     
@@ -182,7 +176,7 @@ def render_intro_screen():
             <h1 style="font-size: 4rem; margin: 0;">💸</h1>
             <p class="big-number">73%</p>
             <p style="margin: 0; font-weight: bold;">Hidden travel costs</p>
-            <p style="margin: 0; color: #666; font-size: 0.9rem;">Parking, congestion, tolls forgotten</p>
+            <p style="margin: 0; color: #666; font-size: 0.9rem;">Mixed transport modes ignored</p>
         </div>
         """, unsafe_allow_html=True)
     
@@ -191,95 +185,58 @@ def render_intro_screen():
     # The Solution - Visual
     st.markdown("## ✅ The Solution")
     
-    col1, col2 = st.columns([2, 1])
-    
-    with col1:
-        st.markdown("""
-        <div class="visual-box">
-            <h2 style="color: #667eea; margin-bottom: 1.5rem;">One API Call = Complete Solution</h2>
-            <div class="api-demo">
-            POST /api/v1/optimize<br>
-            {<br>
-            &nbsp;&nbsp;"booking_id": "B2025-001",<br>
-            &nbsp;&nbsp;"customer": "10 Downing St, London",<br>
-            &nbsp;&nbsp;"service": "emergency_repair"<br>
-            }<br><br>
-            // Returns in 200ms ⚡<br>
-            {<br>
-            &nbsp;&nbsp;"provider": "John Smith",<br>
-            &nbsp;&nbsp;"total_cost": 73.45,<br>
-            &nbsp;&nbsp;"eta": "14:45",<br>
-            &nbsp;&nbsp;"route": "optimized_path"<br>
-            }
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    with col2:
-        st.markdown("""
-        <div class="solution-visual" style="height: 100%;">
-            <h1 style="font-size: 4rem; margin: 0;">🎯</h1>
-            <p class="solution-number">200ms</p>
-            <p style="margin: 0; font-weight: bold;">Response time</p>
-            <p style="margin-top: 1rem; color: #666;">✓ Best provider<br>✓ All costs included<br>✓ Optimized route</p>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    st.markdown("<br>", unsafe_allow_html=True)
-    
-    # Visual Benefits
     col1, col2, col3, col4 = st.columns(4)
     
     with col1:
         st.markdown("""
         <div class="visual-box">
-            <h1 style="color: #667eea; font-size: 3rem; margin: 0;">30%</h1>
-            <p style="font-weight: bold; margin: 0.5rem 0;">Cost Reduction</p>
-            <p style="color: #666; font-size: 0.9rem; margin: 0;">Guaranteed savings</p>
+            <h1 style="color: #667eea; font-size: 3rem; margin: 0;">🎯</h1>
+            <p style="font-weight: bold; margin: 0.5rem 0;">Smart Matching</p>
+            <p style="color: #666; font-size: 0.9rem; margin: 0;">Best provider for each job</p>
         </div>
         """, unsafe_allow_html=True)
     
     with col2:
         st.markdown("""
         <div class="visual-box">
-            <h1 style="color: #667eea; font-size: 3rem; margin: 0;">5min</h1>
-            <p style="font-weight: bold; margin: 0.5rem 0;">Integration</p>
-            <p style="color: #666; font-size: 0.9rem; margin: 0;">Quick setup</p>
+            <h1 style="color: #667eea; font-size: 3rem; margin: 0;">🚌</h1>
+            <p style="font-weight: bold; margin: 0.5rem 0;">Multi-modal</p>
+            <p style="color: #666; font-size: 0.9rem; margin: 0;">Car, public, or mixed</p>
         </div>
         """, unsafe_allow_html=True)
     
     with col3:
         st.markdown("""
         <div class="visual-box">
-            <h1 style="color: #667eea; font-size: 3rem; margin: 0;">100%</h1>
-            <p style="font-weight: bold; margin: 0.5rem 0;">UK Coverage</p>
-            <p style="color: #666; font-size: 0.9rem; margin: 0;">All zones & charges</p>
+            <h1 style="color: #667eea; font-size: 3rem; margin: 0;">💰</h1>
+            <p style="font-weight: bold; margin: 0.5rem 0;">True Costs</p>
+            <p style="color: #666; font-size: 0.9rem; margin: 0;">All expenses included</p>
         </div>
         """, unsafe_allow_html=True)
     
     with col4:
         st.markdown("""
         <div class="visual-box">
-            <h1 style="color: #667eea; font-size: 3rem; margin: 0;">24/7</h1>
-            <p style="font-weight: bold; margin: 0.5rem 0;">Availability</p>
-            <p style="color: #666; font-size: 0.9rem; margin: 0;">Always online</p>
+            <h1 style="color: #667eea; font-size: 3rem; margin: 0;">⚡</h1>
+            <p style="font-weight: bold; margin: 0.5rem 0;">Instant</p>
+            <p style="color: #666; font-size: 0.9rem; margin: 0;">Real-time results</p>
         </div>
         """, unsafe_allow_html=True)
     
     st.markdown("<br>", unsafe_allow_html=True)
     
-    # Why Choose Our Service
-    st.markdown("## 🚀 Why Businesses Choose Us")
+    # How It Works
+    st.markdown("## 🚀 How It Works for Businesses")
     
     col1, col2, col3 = st.columns(3)
     
     with col1:
         st.markdown("""
         <div class="visual-box">
-            <h1 style="font-size: 3rem; margin: 0; color: #667eea;">⚡</h1>
-            <h4 style="color: #667eea;">Instant Setup</h4>
+            <h1 style="font-size: 3rem; margin: 0; color: #667eea;">1️⃣</h1>
+            <h4 style="color: #667eea;">Single API Call</h4>
             <p style="color: #666; font-size: 0.95rem;">
-            Go live in 5 minutes with our simple API. No complex installations, no training needed. Just send a request and get optimized results.
+            Your system sends booking and provider data to our API endpoint for instant analysis.
             </p>
         </div>
         """, unsafe_allow_html=True)
@@ -287,10 +244,10 @@ def render_intro_screen():
     with col2:
         st.markdown("""
         <div class="visual-box">
-            <h1 style="font-size: 3rem; margin: 0; color: #667eea;">🎯</h1>
-            <h4 style="color: #667eea;">Tailored to Your Business</h4>
+            <h1 style="font-size: 3rem; margin: 0; color: #667eea;">2️⃣</h1>
+            <h4 style="color: #667eea;">Intelligent Processing</h4>
             <p style="color: #666; font-size: 0.95rem;">
-            Every business is unique. Configure your own rates, service types, and constraints. Our AI adapts to your specific needs.
+            AI optimizes provider assignments and calculates complete travel costs in milliseconds.
             </p>
         </div>
         """, unsafe_allow_html=True)
@@ -298,13 +255,42 @@ def render_intro_screen():
     with col3:
         st.markdown("""
         <div class="visual-box">
-            <h1 style="font-size: 3rem; margin: 0; color: #667eea;">📈</h1>
-            <h4 style="color: #667eea;">Scale Without Limits</h4>
+            <h1 style="font-size: 3rem; margin: 0; color: #667eea;">3️⃣</h1>
+            <h4 style="color: #667eea;">Structured Response</h4>
             <p style="color: #666; font-size: 0.95rem;">
-            From 10 to 10,000 bookings daily. Our infrastructure grows with you. Pay only for what you use, no upfront costs.
+            Receive optimized planning with recommendations and detailed cost breakdowns via API.
             </p>
         </div>
         """, unsafe_allow_html=True)
+    
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+    # API Integration Info
+    st.markdown("""
+    <div style="background: #f0f4f8; padding: 2rem; border-radius: 15px; margin-bottom: 2rem;">
+        <h3 style="color: #667eea; text-align: center; margin-bottom: 1.5rem;">🔌 Enterprise Integration</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
+            <div style="text-align: center;">
+                <h1 style="font-size: 2.5rem; color: #667eea; margin: 0;">⚡</h1>
+                <h4 style="margin: 0.5rem 0;">Real-time Planning</h4>
+                <p style="color: #666; font-size: 0.9rem;">Optimize assignments for future bookings</p>
+            </div>
+            <div style="text-align: center;">
+                <h1 style="font-size: 2.5rem; color: #667eea; margin: 0;">📊</h1>
+                <h4 style="margin: 0.5rem 0;">Historical Analysis</h4>
+                <p style="color: #666; font-size: 0.9rem;">Calculate costs for completed journeys</p>
+            </div>
+            <div style="text-align: center;">
+                <h1 style="font-size: 2.5rem; color: #667eea; margin: 0;">🔄</h1>
+                <h4 style="margin: 0.5rem 0;">Seamless Integration</h4>
+                <p style="color: #666; font-size: 0.9rem;">Works with your existing systems</p>
+            </div>
+        </div>
+        <p style="text-align: center; margin-top: 1.5rem; color: #666;">
+        <em>Note: The Excel upload in this demo is for testing purposes. Enterprise customers use direct API integration.</em>
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
     
     st.markdown("<br>", unsafe_allow_html=True)
     
@@ -314,30 +300,30 @@ def render_intro_screen():
     with col1:
         st.markdown("""
         <div class="comparison-table">
-            <h3 style="color: #38a169; margin-bottom: 1.5rem;">✨ Complete Service Package</h3>
+            <h3 style="color: #38a169; margin-bottom: 1.5rem;">✨ Key Features</h3>
             <div class="comparison-row">
                 <span class="check-mark">✓</span>
-                <span><strong>Real-time optimization</strong> - Always get the best match</span>
+                <span><strong>Freelancer matching</strong> - Skills, location, availability</span>
             </div>
             <div class="comparison-row">
                 <span class="check-mark">✓</span>
-                <span><strong>All UK charges included</strong> - Congestion, parking, tolls</span>
+                <span><strong>Mixed transport modes</strong> - Car, public, or combined</span>
             </div>
             <div class="comparison-row">
                 <span class="check-mark">✓</span>
-                <span><strong>Multi-stop journeys</strong> - Complex routes simplified</span>
+                <span><strong>Different rates</strong> - Each provider's travel costs</span>
             </div>
             <div class="comparison-row">
                 <span class="check-mark">✓</span>
-                <span><strong>Provider availability</strong> - Never double-book</span>
+                <span><strong>UK charges</strong> - Congestion, parking, tolls</span>
             </div>
             <div class="comparison-row">
                 <span class="check-mark">✓</span>
-                <span><strong>Automatic updates</strong> - Always current with regulations</span>
+                <span><strong>Multi-booking routes</strong> - Optimize full days</span>
             </div>
             <div class="comparison-row">
                 <span class="check-mark">✓</span>
-                <span><strong>24/7 support</strong> - We're here when you need us</span>
+                <span><strong>API integration</strong> - Connects to your system</span>
             </div>
         </div>
         """, unsafe_allow_html=True)
@@ -347,28 +333,28 @@ def render_intro_screen():
         <div class="comparison-table">
             <h3 style="color: #667eea; margin-bottom: 1.5rem;">🎯 Perfect For</h3>
             <div class="comparison-row">
-                <span style="font-size: 1.5rem; margin-right: 1rem;">🏥</span>
-                <span><strong>Healthcare</strong> - Home visits, mobile clinics</span>
-            </div>
-            <div class="comparison-row">
                 <span style="font-size: 1.5rem; margin-right: 1rem;">🔧</span>
-                <span><strong>Field Services</strong> - Repairs, maintenance, installations</span>
+                <span><strong>Plumbers</strong> - Emergency & scheduled calls</span>
             </div>
             <div class="comparison-row">
-                <span style="font-size: 1.5rem; margin-right: 1rem;">📦</span>
-                <span><strong>Delivery</strong> - Last-mile optimization</span>
+                <span style="font-size: 1.5rem; margin-right: 1rem;">🧹</span>
+                <span><strong>Cleaners</strong> - Residential & commercial</span>
             </div>
             <div class="comparison-row">
-                <span style="font-size: 1.5rem; margin-right: 1rem;">🏗️</span>
-                <span><strong>Construction</strong> - Site visits, inspections</span>
+                <span style="font-size: 1.5rem; margin-right: 1rem;">👶</span>
+                <span><strong>Childcare</strong> - Babysitters & nannies</span>
             </div>
             <div class="comparison-row">
-                <span style="font-size: 1.5rem; margin-right: 1rem;">💼</span>
-                <span><strong>Consulting</strong> - Client meetings, interpreting </span>
+                <span style="font-size: 1.5rem; margin-right: 1rem;">🗣️</span>
+                <span><strong>Interpreters</strong> - Medical & legal visits</span>
             </div>
             <div class="comparison-row">
-                <span style="font-size: 1.5rem; margin-right: 1rem;">🚨</span>
-                <span><strong>Emergency Services</strong> - Rapid response</span>
+                <span style="font-size: 1.5rem; margin-right: 1rem;">🏥</span>
+                <span><strong>Care providers</strong> - Home healthcare</span>
+            </div>
+            <div class="comparison-row">
+                <span style="font-size: 1.5rem; margin-right: 1rem;">📐</span>
+                <span><strong>Tutors</strong> - In-home education</span>
             </div>
         </div>
         """, unsafe_allow_html=True)
@@ -376,20 +362,20 @@ def render_intro_screen():
     st.markdown("<br>", unsafe_allow_html=True)
     
     # What's Included
-    st.markdown("## 🎁 Everything You Need")
+    st.markdown("## 🎁 What We Calculate")
     
     col1, col2, col3 = st.columns(3)
     
     with col1:
         st.markdown("""
         <div class="visual-box">
-            <h1 style="font-size: 3rem; margin: 0;">🧠</h1>
-            <h4 style="color: #667eea;">Smart Matching</h4>
+            <h1 style="font-size: 2.5rem; margin: 0;">🚗</h1>
+            <h4 style="color: #667eea;">Travel Costs</h4>
             <p style="color: #666; font-size: 0.9rem;">
-            • AI provider selection<br>
-            • Skill matching<br>
-            • Availability checking<br>
-            • Cost optimization
+            • Mileage/fuel<br>
+            • Public transport<br>
+            • Parking fees<br>
+            • Congestion charges
             </p>
         </div>
         """, unsafe_allow_html=True)
@@ -397,13 +383,13 @@ def render_intro_screen():
     with col2:
         st.markdown("""
         <div class="visual-box">
-            <h1 style="font-size: 3rem; margin: 0;">💰</h1>
-            <h4 style="color: #667eea;">Complete Costs</h4>
+            <h1 style="font-size: 2.5rem; margin: 0;">⏱️</h1>
+            <h4 style="color: #667eea;">Time & Rates</h4>
             <p style="color: #666; font-size: 0.9rem;">
-            • Mileage & fuel<br>
-            • Parking fees<br>
-            • Congestion charges<br>
-            • Travel time
+            • Travel time costs<br>
+            • Individual rates<br>
+            • Service duration<br>
+            • Multi-stop routes
             </p>
         </div>
         """, unsafe_allow_html=True)
@@ -411,31 +397,41 @@ def render_intro_screen():
     with col3:
         st.markdown("""
         <div class="visual-box">
-            <h1 style="font-size: 3rem; margin: 0;">📊</h1>
-            <h4 style="color: #667eea;">Real Intelligence</h4>
+            <h1 style="font-size: 2.5rem; margin: 0;">🎯</h1>
+            <h4 style="color: #667eea;">Smart Matching</h4>
             <p style="color: #666; font-size: 0.9rem;">
-            • Traffic prediction<br>
-            • Route optimization<br>
-            • Historical learning<br>
-            • Cost forecasting
+            • Skill matching<br>
+            • Availability<br>
+            • Location proximity<br>
+            • Transport mode
             </p>
         </div>
         """, unsafe_allow_html=True)
     
     st.markdown("<br><br>", unsafe_allow_html=True)
     
-    # Final CTA
+    # Try It Now CTA
     st.markdown("""
-    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 3rem; border-radius: 15px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
-        <h2 style="margin-bottom: 1rem; font-size: 2.5rem;">Start Saving Today</h2>
-        <div>
-            <a href="mailto:katerina.i@eco-n-tech.com?subject=Travel Cost Optimizer API Access Request&body=Hi,%0D%0A%0D%0AI'm interested in getting API access to the Travel Cost Optimizer.%0D%0A%0D%0ACompany:%0D%0AUse Case:%0D%0AMonthly Volume:%0D%0A%0D%0AThanks!" class="cta-button" style="font-size: 1.2rem; padding: 1rem 3rem;">Get API Access</a>
-        </div>
-        <p style="margin-top: 2rem; font-size: 0.9rem; opacity: 0.8;">✉️ katerina.i@eco-n-tech.com</p>
+    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 2rem; border-radius: 15px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+        <h2 style="margin-bottom: 1rem; font-size: 2rem;">👆 Try the Demo Above</h2>
+        <p style="font-size: 1.1rem; opacity: 0.95;">
+        Click the <strong>Planning Demo</strong> or <strong>Journey Demo</strong> tabs to test with your data
+        </p>
     </div>
     """, unsafe_allow_html=True)
     
     st.markdown("<br>", unsafe_allow_html=True)
+    
+    # Contact Section
+    st.markdown("""
+    <div style="text-align: center; padding: 2rem;">
+        <h3 style="color: #667eea; margin-bottom: 1rem;">Want to implement this for your business?</h3>
+        <p style="font-size: 1.1rem; color: #666; margin-bottom: 1rem;">
+        This solution is built for UK businesses but can be localized for other regions.
+        </p>
+        <p style="font-size: 1.2rem;">✉️ <strong>katerina.i@eco-n-tech.com</strong></p>
+    </div>
+    """, unsafe_allow_html=True)
     
     # Hackathon Footer
     st.markdown("""
@@ -464,7 +460,7 @@ def render_intro_screen():
         <p style="margin-top: 2rem; color: #666;">
         <strong>Innovation:</strong> First UK-specific travel cost optimizer with complete charge coverage<br>
         <strong>Impact:</strong> Saves businesses £45K+ annually on travel expenses<br>
-        <strong>Scalability:</strong> API-first design ready for enterprise deployment
+        <strong>Scalability:</strong> Designed for easy deployment and localization
         </p>
     </div>
     """, unsafe_allow_html=True)

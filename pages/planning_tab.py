@@ -35,12 +35,18 @@ def render_planning_tab():
             key="bookings_upload"
         )
         
+        # Create fresh templates every time - avoid caching
         bookings_template, providers_template = excel_handler.create_planning_templates()
+        
+        # Add timestamp to force fresh download
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        
         st.download_button(
             "📥 Download Bookings Template",
             data=bookings_template,
-            file_name="bookings_template.xlsx",
-            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            file_name=f"bookings_template_{timestamp}.xlsx",
+            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            key=f"download_bookings_{timestamp}"
         )
     
     with col2:
@@ -54,8 +60,9 @@ def render_planning_tab():
         st.download_button(
             "📥 Download Providers Template",
             data=providers_template,
-            file_name="providers_template.xlsx",
-            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            file_name=f"providers_template_{timestamp}.xlsx",
+            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            key=f"download_providers_{timestamp}"
         )
     
     # Step 2: Planning

@@ -49,27 +49,21 @@ with tab3:
 
 # Sidebar with API info
 with st.sidebar:
-    st.markdown("## 🔌 API Access")
+    st.markdown("## 🔌 Smart Travel Cost Optimizer")
     st.markdown("""
-    ### Quick Start
-    ```bash
-    curl -X POST \\
-      https://api.travelcost.uk/v1/calculate \\
-      -H 'Authorization: Bearer YOUR_API_KEY' \\
-      -H 'Content-Type: application/json' \\
-      -d '{
-        "booking_id": "B001",
-        "customer_address": "London SW1A 1AA",
-        "service_type": "emergency"
-      }'
-    ```
-    
     ### Features
     - ⚡ Real-time calculation
-    - 🔐 Secure authentication
+    - 🚗 Multi-modal transport
     - 📊 Batch processing
-    - 🔄 Webhook support
-    - 📈 Usage analytics
+    - 💰 Complete cost breakdown
+    - 🗺️ Route optimization
+    
+    ### Use Cases
+    - Healthcare providers
+    - Field service teams
+    - Delivery services
+    - Emergency responders
+    - Mobile consultants
     
     ### Contact
     📧 katerina.i@eco-n-tech.com

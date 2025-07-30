@@ -263,16 +263,23 @@ def render_excel_upload(provider_id: str, provider_start: str, travel_mode: str,
         )
     
     with col2:
-        # Download template
+        # Download template - Force recreation every time
+        # Create a fresh instance without caching
         excel_handler = ExcelHandler()
-        template = excel_handler.create_provider_journey_template()
+        
+        # Generate template with timestamp to avoid caching
+        template_data = excel_handler.create_provider_journey_template()
+        
+        # Add timestamp to filename to prevent browser caching
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         
         st.download_button(
             label="📥 Download Provider Journey Template",
-            data=template,
-            file_name="provider_journey_template.xlsx",
+            data=template_data,
+            file_name=f"provider_journey_template_{timestamp}.xlsx",
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            help="Download Excel template specifically for provider journey calculations"
+            help="Download Excel template specifically for provider journey calculations",
+            key=f"download_provider_template_{timestamp}"  # Unique key to force refresh
         )
     
     if uploaded_file:
