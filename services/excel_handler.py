@@ -50,10 +50,10 @@ class ExcelHandler:
                     'Wolverhampton, WV2 7EE'
                 ],
                 'ServiceTypes': ['Emergency,Repair', 'Installation,Maintenance', 'All', 'Repair,Emergency', 'Emergency,Installation'],
-                'TravelMode': ['Car', 'Car', 'Van', 'Car', 'Van'],
+                'TravelMode': ['Car', 'Public Transport', 'Van', 'Car and Public Transport', 'Van'],
                 'ServiceCost': [50.00, 45.00, 60.00, 48.00, 55.00],  # Flat service cost
                 'TravelTimeRate': [15.00, 15.00, 18.00, 15.00, 18.00],  # Per hour for travel
-                'MileageRate': [0.45, 0.45, 0.60, 0.45, 0.60]  # Per mile
+                'MileageRate': [0.45, 0.00, 0.60, 0.30, 0.60]  # Per mile (reduced for Car+Public)
             })
             providers_df.to_excel(writer, sheet_name='Providers', index=False)
             
@@ -106,7 +106,7 @@ class ExcelHandler:
                     '1. PROVIDER DETAILS:',
                     '   - Provider_ID: Unique identifier for the provider',
                     '   - Provider_Start_Location: Where the provider starts their journey',
-                    '   - Provider_Travel_Type: Car, Public Transport, or Mixed',
+                    '   - Provider_Travel_Type: Car, Van, Public Transport, or Car and Public Transport',
                     '   - Provider_Travel_Time_Cost_Per_Hour: Hourly rate for travel time (number only, no £ symbol)',
                     '   - Provider_Mileage_Cost_Per_Mile: Cost per mile (number only, no £ symbol) - use 0 for public transport',
                     '   - Parking_Paid: YES if parking costs are covered, NO if not',

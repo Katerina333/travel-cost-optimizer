@@ -85,6 +85,7 @@ class CostCalculator:
         travel_breakdown = {}
         
         if travel_mode in ['Car', 'Van']:
+            # For Car or Van, calculate driving costs
             # 1. Mileage cost (round trip) - covers fuel and vehicle wear
             mileage_cost = round(distance * 2 * mileage_rate, 2)
             travel_breakdown['mileage'] = mileage_cost
@@ -115,7 +116,38 @@ class CostCalculator:
                 travel_breakdown['tolls'] = toll_cost
                 travel_breakdown['toll_roads'] = [toll['name'] for toll in tolls]
         
-        else:  # Public Transport
+        elif travel_mode == 'Car and Public Transport':
+            # Mixed mode: Drive to station/park and ride, then public transport
+            # Assume driving 30% of distance to park & ride, then public transport
+            
+            # 1. Partial mileage (30% of distance for park & ride)
+            park_ride_distance = distance * 0.3
+            mileage_cost = round(park_ride_distance * 2 * mileage_rate, 2)
+            travel_breakdown['mileage_to_station'] = mileage_cost
+            
+            # 2. Park & Ride parking (full day)
+            travel_breakdown['park_and_ride'] = 5.00  # Typical UK park & ride cost
+            
+            # 3. Public transport for main journey (70% of distance)
+            public_distance = distance * 0.7
+            public_costs = self.uk_transport.estimate_public_transport_cost(
+                provider.address,
+                booking.customer_address,
+                public_distance
+            )
+            
+            if 'train' in public_costs:
+                travel_breakdown['public_transport'] = public_costs['train']['cost'] * 2
+                travel_breakdown['transport_type'] = 'Park & Ride + Train'
+            else:
+                travel_breakdown['public_transport'] = round(public_distance * 2 * 0.20, 2)
+                travel_breakdown['transport_type'] = 'Park & Ride + Bus'
+            
+            # Note in breakdown
+            travel_breakdown['mode_note'] = 'Car to station, then public transport'
+            
+        elif travel_mode == 'Public Transport':
+            # Public transport only mode
             # Get detailed public transport costs
             public_costs = self.uk_transport.estimate_public_transport_cost(
                 provider.address,
